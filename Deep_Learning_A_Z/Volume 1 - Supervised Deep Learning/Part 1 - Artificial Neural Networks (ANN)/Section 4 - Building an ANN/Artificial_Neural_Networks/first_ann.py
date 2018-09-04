@@ -30,7 +30,7 @@ onehotencoder = OneHotEncoder(categorical_features=[1]) # Separates categorical 
 x = onehotencoder.fit_transform(x).toarray()
 x = x[:, 1:] # Removes first column to prevent dummy variable trap
 
-x_train, x_test, t_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0) # Creates train and test sets
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0) # Creates train and test sets
 
 sc = StandardScaler() # Scales data to make initial weight value close to end value
 x_train = sc.fit_transform(x_train) # Computes mean and applies transformation
@@ -48,3 +48,11 @@ classifier.add(Dense(units=1, kernel_initializer='uniform', activation='sigmoid'
 
 # Note: Softmax applies to a dependent variable that has more than 2 categories
 # i.e. fMRI categorizations
+
+classifier.compile(optimizer="adam", loss="binary_crossentropy", metrics=['accuracy'])
+# Notes
+# adam is a kind of stochastic gradient descent
+# For multivariabel, use categorical cross entropy
+# Accuracy is predefined and shows accuracy
+
+classifier.fit(x_train, y_train, batch_size=10, epochs=100)
